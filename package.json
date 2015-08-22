@@ -1,0 +1,47 @@
+{
+  "name": "ajax-call",
+  "version": "1.0.0",
+  "description": "A simple ajax call formatter between server and client",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --reporter spec -u tdd --compilers js:babel/register --require './test/index.js' './test/**/test.*.es6'",
+    "compile": "grunt babel",
+    "prepublish": "npm run compile"
+  },
+  "keywords": [
+    "ajax",
+    "json",
+    "formatter",
+    "messages",
+    "form",
+    "upload"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Lughino/AjaxCall.git"
+  },
+  "bugs": "https://github.com/Lughino/AjaxCall/issues",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "author": "Luca Pau <luca.pau82@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "babel": "^5.8.21",
+    "babel-eslint": "^4.0.10",
+    "babel-runtime": "^5.8.20",
+    "grunt-babel": "^5.0.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-eslint": "^17.1.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-shell": "^1.1.2",
+    "isparta": "^3.0.3",
+    "istanbul": "^0.3.18",
+    "mocha": "^2.2.5",
+    "should": "^7.0.4",
+    "sinon": "^1.15.4"
+  }
+}
