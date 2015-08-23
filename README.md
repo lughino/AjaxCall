@@ -168,7 +168,7 @@ Return true if `countErrors` > 0
 
 
 ## AjaxDataGridModel
-**This model inherits from (AjaxList)[#ajaxlistmodel]**   
+**This model inherits from [AjaxList](#ajaxlistmodel)**   
 It formats the response by entering information relevant to pagination.
 
 Returns the following structure:
@@ -192,7 +192,7 @@ Returns the following structure:
 
 ### Methods
 
-#### reInit([totalItems=0], [currentPage=1], [totalPages=0], [itemsPerPage=config.resultsPerPageDefault])
+#### reInit([totalItems=0, currentPage=1, totalPages=0, itemsPerPage=config.resultsPerPageDefault])
 * `totalItems` is the total items for pagination
 * `currentPage` is the current page
 * `totalPages` is the total number of pages
