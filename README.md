@@ -100,6 +100,31 @@ It also launched a log with status `error` (*see section log*)
 ## AjaxListModel
 It adds an array of items to the response.
 
+```javascript
+app.get('/api/v1/users', function(req, res) {
+  var ajaxList = require('ajax-call').AjaxListFactory();
+  
+  db.collection('users').find().toArray(function(err, docs) {
+    if(err)
+      return ajaxList.sendUnhandledExceptionMessage(res, err);
+    
+    if(docs == null)
+      return ajaxList.sendValue(res, {});
+    
+    for(var i = 0, length = docs.length; i < length; i++) {
+      var user = docs[i];
+      delete user.password;
+      
+      ajaxList.addItem(user);
+    }
+    
+    // use sendValue method for append other values
+    return ajaxList.sendValue(res, 'users of my application');
+  });
+});
+
+```
+
 Returns the following structure:
 ```javascript
 {
@@ -139,6 +164,42 @@ a !== b // is true!
 ## AjaxFormCallModel
 It formats the response by grouping errors for field
 
+```javascript
+app.post('/api/v1/users', function(req, res) {
+  var ajaxFormCall = require('ajax-call').AjaxFormCallFactory();
+  
+  var fields = req.body;
+  
+  // validate data from req.body ex:
+  if(fields.name == null || typeof fields.name !== 'string') {
+    ajaxFormCall.addError('name', 'name fields is required');
+  } else if(fields.name.length < 1 || fields.name.length > 30) {
+    ajaxFormCall.addError('name', 'field name must be length between 1 and 30 characters');
+  }
+  if(fields.surname == null || typeof fields.surname !== 'string') {
+    ajaxFormCall.addError('surname', 'surname fields is required');
+  } else if(fields.surname.length < 1 || fields.surname.length > 30) {
+   ajaxFormCall.addError('surname', 'field surname must be length between 1 and 30 characters');
+  }
+  // etc..
+  
+  if(ajaxFormCall.hasError())
+    return ajaxFormCall.sendErrorMessage(res, 403, 'form not valid');
+  
+  
+  db.collection('users').insert(fields, function(err, doc) {
+    if(err)
+      return ajaxList.sendUnhandledExceptionMessage(res, err);
+    
+    // use sendValue method for append other values
+    return ajaxList.sendValue(res, 'form valid!');
+    // in alternative use send method if you don't send any values
+    return ajaxList.send(res);
+  });
+});
+
+```
+
 Returns the following structure:
 ```javascript
 {
@@ -171,6 +232,37 @@ Return true if `countErrors` > 0
 **This model inherits from [AjaxList](#ajaxlistmodel)**   
 It formats the response by entering information relevant to pagination.
 
+```javascript
+app.get('/api/v1/users', function(req, res) {
+  // you can initialize pagination info now or using reInit method
+  var ajaxDataGrid = require('ajax-call').AjaxDataGridFactory(
+    totalItems, req.body.currentPage, totalPages, req.body.itemsPerPage
+  });
+  
+  db.collection('users').find().toArray(function(err, docs) {
+    if(err)
+      return ajaxDataGrid.sendUnhandledExceptionMessage(res, err);
+    
+    if(docs == null)
+      return ajaxDataGrid.sendValue(res, {});
+    
+    for(var i = 0, length = docs.length; i < length; i++) {
+      var user = docs[i];
+      delete user.password;
+      
+      ajaxDataGrid.addItem(user);
+    }
+    ajaxDataGrid.reInit(
+      totalItems, req.body.currentPage, totalPages, req.body.itemsPerPage
+    );
+    
+    // use sendValue method for append other values
+    return ajaxList.sendValue(res, 'users of my application with pagination');
+  });
+});
+
+```
+
 Returns the following structure:
 ```javascript
 {
@@ -188,7 +280,7 @@ Returns the following structure:
 }
 ```
 
-*You can configure a `itemsPerPage` default number. See section `config` for more details.*
+*You can configure a `itemsPerPage` default number. See section [config](#config) for more details.*
 
 ### Methods
 
@@ -199,3 +291,36 @@ Returns the following structure:
 * `itemsPerPage` is number of items per page (*default config.resultsPerPageDefault*)
 
 Re-init information relevant to pagination.
+
+
+setLogger
+Config
+------
+
+You can configure a `itemsPerPage` default number and max number with global config.
+Default number setted are:
+* resultsPerPageDefault : 10
+* resultsPerPageMax : 100
+
+```javascript
+var ajaxCallConfig = require('ajax-call').config;
+ajaxCallConfig.resultsPerPageDefault = 20;
+ajaxCallConfig.resultsPerPageMax = 50;
+```
+
+
+Logger
+------
+
+You can set the logging system used by the module when methods are called `sendUncaughtExceptionMessage` and `sendUnhandledExceptionMessage`   
+For example [log4js](https://github.com/nomiddlename/log4js-node)   
+By default, the module will use `console`
+
+```javascript
+var log4js = require('log4js');
+log4js.configure({}); // config log4js
+var logger = log4js.getLogger('main');
+var ajaxCallLogger = require('ajax-call');
+
+ajaxCallLogger.setLogger(logger);
+```
