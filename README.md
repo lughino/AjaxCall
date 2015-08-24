@@ -1,6 +1,4 @@
 # AjaxCall
-[![Build Status](https://drone.io/github.com/Lughino/AjaxCall/status.png)](https://drone.io/github.com/Lughino/AjaxCall/latest)
-[![Code Climate](https://codeclimate.com/github/Lughino/AjaxCall/badges/gpa.svg)](https://codeclimate.com/github/Lughino/AjaxCall)   
 A simple ajax call formatter between server and client (built in es6 and compiled in es5 with babel)
 
 ***It requires [Express](http://expressjs.com/) installed in your project!***
