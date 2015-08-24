@@ -58,7 +58,7 @@ class AjaxList extends AjaxCall {
 
   concatItems(...items) {
     for(let item of items) {
-      this[_items] = this[_items].concat(item);
+      this.items = this.items.concat(item);
     }
     return this;
   }

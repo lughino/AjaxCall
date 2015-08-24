@@ -29,6 +29,9 @@
   "dependencies": {
     "grunt": "^0.4.5"
   },
+  "peerDependencies": {
+    "express": ">= 4.x"
+  },
   "devDependencies": {
     "babel": "^5.8.21",
     "babel-eslint": "^4.0.10",
